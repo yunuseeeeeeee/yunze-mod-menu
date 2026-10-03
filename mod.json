@@ -1,0 +1,11 @@
+{
+	"geode": "5.10.1",
+	"gd": {
+		"android": "2.2081"
+	},
+	"id": "yunze.mod-menu",
+	"name": "Yunze Mod Menu",
+	"version": "v1.0.0",
+	"developer": "Yunze",
+	"description": "In-game toggle menu (test features)."
+}
