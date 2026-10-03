@@ -8,6 +8,6 @@ public:
 
 protected:
     bool init();
-    void addRow(int index, float y);
+    void addRow(int index, float labelX, float y);
     void onToggle(cocos2d::CCObject* sender);
 };

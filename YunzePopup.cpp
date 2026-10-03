@@ -11,11 +11,18 @@ namespace {
         char const* title;
     };
 
+    // 2 sütun x 4 satır
     constexpr Feature kFeatures[] = {
-        {yunze::kStatusLabel,   "Status Label"},
-        {yunze::kToasts,        "Toast Messages"},
-        {yunze::kCompactButton, "Compact Button"},
+        {yunze::kFps,            "FPS Counter"},
+        {yunze::kCps,            "CPS Counter"},
+        {yunze::kHitboxes,       "Show Hitboxes"},
+        {yunze::kHideUi,         "Hide Game UI"},
+        {yunze::kAutoCheckpoint, "Auto Checkpoint"},
+        {yunze::kStatusLabel,    "Status Label"},
+        {yunze::kToasts,         "Toast Messages"},
+        {yunze::kCompactButton,  "Compact Button"},
     };
+    constexpr int kFeatureCount = sizeof(kFeatures) / sizeof(kFeatures[0]);
 }
 
 void yunze::applyStatusLabel(PlayLayer* pl) {
@@ -49,36 +56,40 @@ YunzePopup* YunzePopup::create() {
 }
 
 bool YunzePopup::init() {
-    if (!Popup::init(320.f, 190.f)) return false;
+    if (!Popup::init(440.f, 230.f)) return false;
 
     this->setTitle("Yunze Mod Menu");
 
-    for (int i = 0; i < 3; ++i) {
-        this->addRow(i, 35.f - i * 38.f);
+    for (int i = 0; i < kFeatureCount; ++i) {
+        int col = i / 4;
+        int row = i % 4;
+        float labelX = col == 0 ? -205.f : 15.f;
+        float y = 50.f - row * 40.f;
+        this->addRow(i, labelX, y);
     }
 
-    auto footer = CCLabelBMFont::create("Test features only", "chatFont.fnt");
+    auto footer = CCLabelBMFont::create("Hitboxes & Auto Checkpoint: practice mode only", "chatFont.fnt");
     footer->setScale(0.6f);
     footer->setOpacity(160);
-    m_mainLayer->addChildAtPosition(footer, Anchor::Center, {0.f, -75.f});
+    m_mainLayer->addChildAtPosition(footer, Anchor::Center, {0.f, -100.f});
 
     return true;
 }
 
-void YunzePopup::addRow(int index, float y) {
+void YunzePopup::addRow(int index, float labelX, float y) {
     auto const& f = kFeatures[index];
 
     auto label = CCLabelBMFont::create(f.title, "bigFont.fnt");
-    label->setScale(0.5f);
+    label->setScale(0.4f);
     label->setAnchorPoint({0.f, 0.5f});
-    m_mainLayer->addChildAtPosition(label, Anchor::Center, {-140.f, y});
+    m_mainLayer->addChildAtPosition(label, Anchor::Center, {labelX, y});
 
     auto toggler = CCMenuItemToggler::createWithStandardSprites(
-        this, menu_selector(YunzePopup::onToggle), 0.8f
+        this, menu_selector(YunzePopup::onToggle), 0.7f
     );
     toggler->setTag(index);
     toggler->toggle(yunze::isOn(f.key));
-    m_buttonMenu->addChildAtPosition(toggler, Anchor::Center, {125.f, y});
+    m_buttonMenu->addChildAtPosition(toggler, Anchor::Center, {labelX + 180.f, y});
 }
 
 void YunzePopup::onToggle(CCObject* sender) {
